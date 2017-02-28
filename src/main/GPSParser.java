@@ -1,7 +1,16 @@
 package main;
 
 public class GPSParser {
-	public static void main(String[] args) {
+	
+	
+	public void getFile()
+	{
 		
 	}
+	
+	public String readFile(File file)
+	{
+		
+	}
+	
 }
