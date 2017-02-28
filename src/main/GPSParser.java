@@ -1,6 +1,9 @@
 package main;
 
 import java.io.*;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class GPSParser {
@@ -26,36 +29,43 @@ public class GPSParser {
 	public String readFile(Scanner reader) throws IOException 
 	{
 		String line = null;
+		Unit unit = new Unit();
 		while (reader.hasNext()) 
 		{
 			line = reader.nextLine();
-			parseLine(line);
+			parseLine(line, unit);
+			
+			//insert into database or write to file instead of
+			//print out
+			System.out.println(unit.toString());
 		}
 		return line;
 	}
 	
-	public void parseLine(String line)
+	public void parseLine(String line, Unit unit)
 	{
-		String date = null;
-		String time = null;
-		String latitude = null;
-		String longitude = null;
+		
 		String[] tokens = line.split(","); 
+
 		if(line.contains("GPGGA"))
 		{
 			if(tokens.length == 15)
 			{
-				 time = tokens[1];
 				 try
 				 {
-					 latitude = (Double.parseDouble(tokens[2])/100) + tokens[3];
-					 longitude = (Double.parseDouble(tokens[4])/100) + tokens[5]; 
+					 String time = tokens[1];
+					 String latitude = (Double.parseDouble(tokens[2])/100) + tokens[3];
+					 String longitude = (Double.parseDouble(tokens[4])/100) + tokens[5];
+					 
+					 unit.setTime(time);
+					 unit.setLatitude(latitude);
+					 unit.setLongitude(longitude);
 				 }
 				 catch(NumberFormatException e)
 				 {
-					 
+					 //leave empty so no error message occurs at end of file
 				 }
-				
+			
 			}		
 		}
 		
@@ -63,14 +73,11 @@ public class GPSParser {
 		{
 			if(tokens.length == 7)
 			{
-				for(int i=0; i < tokens.length; i++)
-				{
-					System.out.println(tokens[i]);
-				}
-
+				String date = tokens[3] + "-" + tokens[2]+"-" + tokens[4];
+				unit.setDate(date);
 			}
-			
 		}
+		
 	}
 
 }
