@@ -4,13 +4,17 @@ import java.util.*;
 
 public class Unit {
 	
-	public Date time;
-	public double latitude;
-	public double longitude;
+	public String time;
+	public Date date;
+	public String latitude;
+	public String longitude;
 	
-	public Unit(Date time, double latitude, double longitude)
+	public Unit(String time, Date date, String latitude, String longitude)
 	{
-		
+		this.time = time;
+		this.date = date;
+		this.latitude = latitude;
+		this.longitude = longitude;
 	}
 	
 }
