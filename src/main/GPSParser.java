@@ -1,16 +1,16 @@
 package main;
 
 import java.io.*;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class GPSParser {
 
+	public boolean readDate = false;
+	
 	public void getFile() 
 	{
-		String path = "res/gps.txt";
+		//String path = "res/gps.txt";
+		String path = "res/gpslog.txt";
 		File file;
 		try 
 		{
@@ -46,30 +46,12 @@ public class GPSParser {
 	{
 		
 		String[] tokens = line.split(","); 
-
 		if(line.contains("GPGGA"))
 		{
-			if(tokens.length == 15)
-			{
-				 try
-				 {
-					 String time = tokens[1];
-					 String latitude = (Double.parseDouble(tokens[2])/100) + tokens[3];
-					 String longitude = (Double.parseDouble(tokens[4])/100) + tokens[5];
-					 
-					 unit.setTime(time);
-					 unit.setLatitude(latitude);
-					 unit.setLongitude(longitude);
-				 }
-				 catch(NumberFormatException e)
-				 {
-					 //leave empty so no error message occurs at end of file
-				 }
-			
-			}		
+			readDate = getLatitude(tokens, unit);
 		}
 		
-		if(line.contains("GPZDA"))
+		else if(line.contains("GPZDA") && readDate == true)
 		{
 			if(tokens.length == 7)
 			{
@@ -78,6 +60,31 @@ public class GPSParser {
 			}
 		}
 		
+	}
+	
+	
+	private boolean getLatitude(String[] tokens,Unit unit)
+	{
+		System.out.println(tokens[2]);
+		if(!tokens[2].equals(""))
+		{
+			 try
+			 {
+				 String time = tokens[1];
+				 String latitude = (Double.parseDouble(tokens[2])/100) + tokens[3];
+				 String longitude = (Double.parseDouble(tokens[4])/100) + tokens[5];
+				 
+				 unit.setTime(time);
+				 unit.setLatitude(latitude);
+				 unit.setLongitude(longitude);
+			 }
+			 catch(NumberFormatException e)
+			 {
+				 //leave empty so no error message occurs at end of file
+			 }
+			 return true;
+		}
+		return false;
 	}
 
 }
