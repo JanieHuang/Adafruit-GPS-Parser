@@ -1,6 +1,7 @@
 package main;
 
 import java.io.*;
+import java.text.DecimalFormat;
 import java.util.*;
 
 public class GPSParser {
@@ -9,8 +10,8 @@ public class GPSParser {
 	
 	public void getFile() 
 	{
-		//String path = "res/gps.txt";
-		String path = "res/gpslog.txt";
+		String path = "res/gps.txt";
+		//String path = "res/gpslog.txt";
 		File file;
 		try 
 		{
@@ -65,14 +66,27 @@ public class GPSParser {
 	
 	private boolean getLatitude(String[] tokens,Unit unit)
 	{
-		System.out.println(tokens[2]);
 		if(!tokens[2].equals(""))
 		{
 			 try
 			 {
 				 String time = tokens[1];
-				 String latitude = (Double.parseDouble(tokens[2])/100) + tokens[3];
-				 String longitude = (Double.parseDouble(tokens[4])/100) + tokens[5];
+				 DecimalFormat f = new DecimalFormat("##.00000");
+				 double preLat = Double.parseDouble(tokens[2])/100;
+				 double preLong = Double.parseDouble(tokens[4])/100;
+				 preLat = Math.round(preLat * 100000.0) / 100000.0;
+				 preLong = Math.round(preLong * 100000.0) / 100000.0;
+				 String latitude = Double.toString(preLat);
+				 String longitude = Double.toString(preLong);
+				 if(tokens[3].equals("S"))
+				 {
+					 latitude = "-" + latitude;
+				 }
+				 
+				 if(tokens[5].equals("W"))
+				 {
+					 longitude = "-" + longitude;
+				 }
 				 
 				 unit.setTime(time);
 				 unit.setLatitude(latitude);

@@ -45,7 +45,7 @@ public class Unit {
 	
 	public String toString()
 	{
-		return "Time: " + time + " Date: " + date + " Lat: " + latitude +" Long: " + longitude;
+		return time + "," + date + "," + latitude + "," + longitude;
 	}
 	
 }
